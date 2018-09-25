@@ -4,8 +4,8 @@ var paddleX = canvas.width / 2;
 var live = 3;
 var isGameOver = false;
 var score = 0;
-var dxBall = 6;
-var dyBall = -6;
+var dxBall = 8;
+var dyBall = -8;
 
 const blockWidth = 96;
 const blockHeight = 30;
@@ -14,18 +14,20 @@ const lineSpacing = 15;
 const rectWidth = 155;
 const rectHeight= 15;
 
+
+
 function gameOver() {
-  if (live === 0) {
+  if (live === 2) {
     ctx.font="50px Arial";
-    ctx.fillStyle='red';
+    ctx.fillStyle='white';
     ctx.textAlign="center";
-    ctx.fillText('GAME OVER', 300 , 250)
+    ctx.fillText('GAME OVER', canvas.width / 2 , 450)
     ctx.font='30px Arial';
-    ctx.fillStyle="blue";
-    ctx.fillText('Score :' + score, 300, 300);
+    ctx.fillStyle="white";
+    ctx.fillText('Score :' + score, canvas.width / 2, 300);
     ctx.font="25px Arial";
-    ctx.fillStyle='blue';
-    ctx.fillText('Reload page to restart', 300, 350);
+    ctx.fillStyle='white';
+    ctx.fillText('Reload page to restart', canvas.width / 2, 350);
   }
 }
 
@@ -50,11 +52,11 @@ class Parameters {
   }
   draw (ctx) {
     ctx.font = " 25px Arial";
-    ctx.fillStyle = 'blue';
+    ctx.fillStyle = 'white';
     ctx.fillText('LIVES:' + live, 10, 30);
     ctx.font = "25px Arial";
-    ctx.fillStyle = 'blue';
-    ctx.fillText('SCORE :' + score, 450, 30);
+    ctx.fillStyle = 'white';
+    ctx.fillText('SCORE :' + score, 770, 30);
   }
 }
 
@@ -96,7 +98,7 @@ class Paddle {
   }
 
   draw (ctx) {
-    ctx.fillStyle = 'red';
+    ctx.fillStyle = 'white';
     ctx.fillRect(this.x - this.width / 2, (canvas.height - this.height) ,this.width ,this.height);
   }
 }
@@ -116,23 +118,22 @@ class Ball {
 
     if (this.x - this.r <= 0 || this.x + this.r >= canvas.width) {
       this.dx = -this.dx;
-    }
+    } // colision right and left wall
 
     if (this.y - this.r <= 0) {
       this.dy = -this.dy;
-    }
+    } // collision top canvas
 
     if (this.y + this.r >= canvas.height - paddle.height && this.x >= paddle.x - paddle.width / 2  && this.x <= paddle.x + paddle.width / 2) {
       if (this.y - this.r <= canvas.height) {
           this.dy = -this.dy;
       }
-    }
+    } // collision paddle
 
     if (this.y + this.r >= canvas.height) {
       this.resetBall(true);
-      console.log('1')
 
-      if (--live === 0) {
+      if (--live === 2) {
         isGameOver = true;
       }
 
@@ -177,13 +178,14 @@ class Ball {
       dyBall = dyBall -= 1;
       dxBall += 1;
       score += 10;
+      live += 1;
       return true;
     }
 
   draw(ctx) {
     ball.move();
 
-    ctx.fillStyle = "blue";
+    ctx.fillStyle = "grey";
     ctx.globalAlpha = this.dx || this.dy ? 1 : 0;
     ctx.beginPath();
     ctx.arc(this.x, this.y, this.r, this.r, 0, 2 * Math.PI);
@@ -195,7 +197,7 @@ class Ball {
 
 function createBlocks(count) {
      blocks = (new Array(count)).fill(null).map((v, i) => {
-      return new Block((i % 6) * (blockWidth + blockSpacing), 40 + Math.floor(i / 6) * (blockHeight + lineSpacing), blockWidth, blockHeight)
+      return new Block((i % 9) * (blockWidth + blockSpacing), 40 + Math.floor(i / 9) * (blockHeight + lineSpacing), blockWidth, blockHeight)
     })
   }
 
@@ -203,7 +205,7 @@ const ball   = new Ball();
 const paddle = new Paddle(paddleX, rectWidth, rectHeight);
 const parameters = new Parameters();
 let blocks;
-createBlocks(18);
+createBlocks(27);
 
 canvas.addEventListener('mousemove', function(e) {
     paddle.move(e.pageX - canvas.offsetLeft);
@@ -218,7 +220,7 @@ function redraw() {
 
   if (ball.isAllPasLa()) {
     ball.resetBall(false);
-    createBlocks(blocks.length + 6);
+    createBlocks(blocks.length + 9);
   }
   parameters.draw(ctx);
   ball.draw(ctx);

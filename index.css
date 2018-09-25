@@ -1,0 +1,19 @@
+* {
+  margin:0;
+  padding:0;
+   } /* to remove the top and left whitespace */
+
+html, body {
+  background: grey;
+  display: flex;
+    } /* just to be sure these are full screen*/
+
+canvas {
+   justify-content: center;
+   background: black;
+   position: absolute;
+   margin-left: 20%;
+   margin-top: 1.5%;
+
+
+    } /* To remove the scrollbars */
