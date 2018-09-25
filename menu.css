@@ -1,0 +1,44 @@
+  @font-face {
+    font-family: "Joystix";
+    src: url('./joystix.ttf');
+  }
+
+ body {
+   margin: 0;
+ }
+
+  .MenuALL {
+    background-color: black;
+    height: 100vh;
+    margin: 0;
+  }
+
+  h1 {
+    padding-top: 10vh;
+    text-align: center;
+    padding-bottom: 10vh;
+    margin: 0;
+    color: white;
+    font-size: 6em;
+    font-family: "Joystix";
+  }
+
+  .buttons {
+    display: flex;
+    flex-direction: column;
+    padding: 0 40%;
+  }
+
+  a {
+    color: white;
+    text-decoration: none;
+    padding-bottom: 3vh;
+    text-align: center;
+    font-size: 2em;
+    font-family: "Joystix";
+  }
+
+  a:hover {
+    background-color: white;
+    color: black;
+  }
