@@ -3,9 +3,9 @@
     src: url('./joystix.ttf');
   }
 
-  body {
-    margin: 0;
-  }
+ body {
+   margin: 0;
+ }
 
   .MenuALL {
     background-color: black;
