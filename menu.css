@@ -59,6 +59,17 @@
     display: none !important;
   }
 
+  .ml15 {
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.5em;
+}
+
+.ml15 .word {
+  display: inline-block;
+  line-height: 1em;
+}
+
   audio {
     display: none;
   }
