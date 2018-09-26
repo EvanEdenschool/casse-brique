@@ -1,22 +1,26 @@
 <!DOCTYPE html>
 <html>
-<head>
+  <head>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="./menu.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
     <title>Casse brique</title>
     <title>Gamedev Canvas Workshop</title>
 </head>
+
 <body>
-  <section class="MenuALL">
-    <i onclick="toggleBackgroundAudio()" class="fas fa-volume-up"></i>
-    <i class="fas fa-volume-down hidden"></i>
-      <h1  class="animation">BRICK BREAKER</h1>
-      <div class="buttons">
-        <a href="./cassebrique.html" class="A2">Start</a>
-        <a href="/" class="A2">Other</a>
+  <section id="myDIV" class="MenuALL">
+    <i id="volume" onclick="wholeButtonSc()" class="fas fa-volume-up" class="button1"></i>
+        <h1 class="ml15">
+          <span class="word">BRICK</span>
+          <span class="word">BREAKER</span>
+        </h1>
+        <div class="buttons">
+        <a href="#" onclick="playStartupSound('cassebrique.html')" class="A2">Start</a>
+        <a href="#" onclick="playStartupSound()" class="A2">Other</a>
       </div>
-  </section>
+    </section>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/2.0.2/anime.min.js"></script>
   <script type="text/javascript" src="menu.js"></script>
 </body>
 </html>
