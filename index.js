@@ -4,30 +4,40 @@ var paddleX = canvas.width / 2;
 var live = 3;
 var isGameOver = false;
 var score = 0;
+var hitSound = new Audio(); hitSound.src = './ballsound.wav';
 var dxBall = 8;
 var dyBall = -8;
+var level = 1;
+var rightPressed = false;
+var leftPressed = false;
+var paddleSpeed = 8;
+var level = 1;
 
 const blockWidth = 96;
 const blockHeight = 30;
 const blockSpacing = 5;
-const lineSpacing = 15;
+const lineSpacing = 5;
 const rectWidth = 155;
 const rectHeight= 15;
 
-
+function playHitSound() {
+  setTimeout(() => hitSound.play(), 10);
+}
 
 function gameOver() {
-  if (live === 2) {
-    ctx.font="50px Arial";
+  if (live === 0) {
+    ctx.font="50px Joystix";
     ctx.fillStyle='white';
     ctx.textAlign="center";
-    ctx.fillText('GAME OVER', canvas.width / 2 , 450)
-    ctx.font='30px Arial';
+    ctx.fillText('GAME OVER', canvas.width / 2 , 400)
+    ctx.font='30px Joystix';
     ctx.fillStyle="white";
-    ctx.fillText('Score :' + score, canvas.width / 2, 300);
+    ctx.textAlign="center";
+    ctx.fillText('Score ' + score, canvas.width / 2, 300);
     ctx.font="25px Arial";
     ctx.fillStyle='white';
-    ctx.fillText('Reload page to restart', canvas.width / 2, 350);
+    ctx.textAlign="center";
+    ctx.fillText('Reload page to restart', canvas.width / 2, 450);
   }
 }
 
@@ -43,7 +53,8 @@ function RectCircleColliding(circle,rect){
 
     var dx = distX - rect.w / 2;
     var dy = distY - rect.h / 2;
-    return (dx * dx + dy * dy <=(circle.r * circle.r));
+
+    return (dx * dx + dy * dy <= (circle.r * circle.r)) && [dx, dy];
 }
 
 class Parameters {
@@ -51,12 +62,16 @@ class Parameters {
 
   }
   draw (ctx) {
-    ctx.font = " 25px Arial";
+    ctx.font = "25px Arial";
     ctx.fillStyle = 'white';
     ctx.fillText('LIVES:' + live, 10, 30);
     ctx.font = "25px Arial";
     ctx.fillStyle = 'white';
+    ctx.fillText('LEVEL ' + level, 400,30);
+    ctx.font = "25px Arial";
+    ctx.fillStyle = 'white';
     ctx.fillText('SCORE :' + score, 770, 30);
+
   }
 }
 
@@ -91,7 +106,9 @@ class Paddle {
     this.x = x;
     this.width = width;
     this.height = height;
+
   }
+
 
   move (x) {
     this.x = x;
@@ -133,7 +150,7 @@ class Ball {
     if (this.y + this.r >= canvas.height) {
       this.resetBall(true);
 
-      if (--live === 2) {
+      if (--live === 0) {
         isGameOver = true;
       }
 
@@ -141,9 +158,16 @@ class Ball {
 
 
       for (let i = 0; i < blocks.length;i++) {
-        if (blocks[i].checkCollisions(this.x, this.y, this.r)) {
+        let result = blocks[i].checkCollisions(this.x, this.y, this.r);
+
+        if (result) {
+          if (result[0] > (blocks[i].width / 2.5)) {
+            this.dx = -this.dx;
+          } else {
+            this.dy = -this.dy;
+          }
           blocks[i].x = -1000;
-          this.dy = -this.dy;
+          playHitSound();
           score++;
         }
       }
@@ -179,6 +203,8 @@ class Ball {
       dxBall += 1;
       score += 10;
       live += 1;
+      level++;
+      paddleSpeed++;
       return true;
     }
 
@@ -192,6 +218,7 @@ class Ball {
     ctx.fill();
     ctx.closePath();
     ctx.globalAlpha = 1;
+
   }
 }
 
@@ -207,6 +234,23 @@ const parameters = new Parameters();
 let blocks;
 createBlocks(27);
 
+document.addEventListener("keydown",   function keyDownHandler(e) {
+    if(e.keyCode == 39) {
+      rightPressed = true;
+    }
+    else if(e.keyCode == 37) {
+      leftPressed = true;
+    }
+  }, false);
+document.addEventListener("keyup",  function keyUpHandler(e) {
+    if (e.keyCode == 39) {
+      rightPressed = false;
+    }
+    else if(e.keyCode == 37) {
+      leftPressed = false;
+    }
+  }, false);
+
 canvas.addEventListener('mousemove', function(e) {
     paddle.move(e.pageX - canvas.offsetLeft);
 }, false);
@@ -216,6 +260,12 @@ function redraw() {
   gameOver();
   if (isGameOver) {
     return;
+  }
+  if(rightPressed && paddle.x < canvas.width) {
+    paddle.x += paddleSpeed;
+  }
+  else if(leftPressed && paddle.x > 0) {
+    paddle.x -= paddleSpeed;
   }
 
   if (ball.isAllPasLa()) {
