@@ -5,6 +5,7 @@
 
  body {
    margin: 0;
+   overflow: hidden;
  }
 
   .MenuALL {
@@ -73,3 +74,4 @@
   audio {
     display: none;
   }
+  
